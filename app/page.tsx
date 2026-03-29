@@ -3,7 +3,6 @@
 import { useState } from "react";
 import MinimalistPrompt from "@/components/MinimalistPrompt";
 import PrdResult from "@/components/PrdResult";
-import { GithubIcon } from "lucide-react";
 
 export default function Home() {
   const [result, setResult] = useState("");
@@ -42,13 +41,6 @@ export default function Home() {
         <div className="font-semibold text-sm tracking-tight pointer-events-auto opacity-40 hover:opacity-100 transition-opacity">
           PRD ARCHITECT v1.0
         </div>
-        <a 
-          href="https://github.com/awingmawe/prd-generator" 
-          target="_blank"
-          className="p-2 rounded-full hover:bg-zinc-200 dark:hover:bg-zinc-800 transition-all pointer-events-auto opacity-40 hover:opacity-100"
-        >
-          <GithubIcon size={18} />
-        </a>
       </header>
 
       {/* Hero Section */}
