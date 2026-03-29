@@ -4,7 +4,7 @@ import { GoogleGenAI } from "@google/genai";
 // Pastikan Anda telah mengatur GEMINI_API_KEY di file .env.local Anda
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
-export const SYSTEM_PROMPT = `
+const SYSTEM_PROMPT = `
 # ============================================================
 # SYSTEM PROMPT — PRD GENERATOR (LENGKAP + THIRD PARTY GUIDE)
 # Versi: 1.0 | Bahasa: Indonesia
@@ -137,7 +137,7 @@ export async function POST(req: Request) {
       );
     }
 
-    const fullPrompt = \`\${SYSTEM_PROMPT}\n\${description}\`;
+    const fullPrompt = `${SYSTEM_PROMPT}\n${description}`;
 
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash",
