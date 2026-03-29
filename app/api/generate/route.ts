@@ -43,7 +43,7 @@ ${description}
 - Sebagai Admin, saya ingin mengelola data sistem agar operasional berjalan lancar.
 
 ## 3. Functional Requirements
-${features.split('\n').map(f => `- ${f}`).join('\n')}
+${features.split('\n').map((f: string) => `- ${f}`).join('\n')}
 
 ## 4. Arsitektur Sistem
 \`\`\`mermaid
