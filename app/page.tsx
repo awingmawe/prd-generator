@@ -1,21 +1,26 @@
 "use client";
 
 import { useState } from "react";
-import PrdForm from "@/components/PrdForm";
+import MinimalistPrompt from "@/components/MinimalistPrompt";
 import PrdResult from "@/components/PrdResult";
-import { Sparkles } from "lucide-react";
+import { Github } from "lucide-react";
 
 export default function Home() {
   const [result, setResult] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleGenerate = async (data: { name: string; description: string; features: string }) => {
+  const handleGenerate = async (prompt: string) => {
     setIsLoading(true);
+    setResult(""); // Clear previous result for a fresh look
     try {
       const response = await fetch("/api/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: JSON.stringify({ 
+          name: "Project Analysis", 
+          description: prompt, 
+          features: "Detailed Analysis requested" 
+        }),
       });
 
       if (!response.ok) throw new Error("Gagal memproses");
@@ -31,38 +36,52 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen bg-zinc-50 dark:bg-black text-zinc-900 dark:text-zinc-100">
-      <header className="border-b bg-white dark:bg-zinc-900 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-2 font-bold text-xl text-blue-600">
-            <Sparkles size={24} />
-            AI PRD & Diagram
-          </div>
+    <div className="min-h-screen bg-[#fafafa] dark:bg-black selection:bg-blue-100 dark:selection:bg-blue-900/30">
+      {/* Subtle Header */}
+      <header className="fixed top-0 w-full z-50 px-6 py-6 flex justify-between items-center pointer-events-none">
+        <div className="font-semibold text-sm tracking-tight pointer-events-auto opacity-40 hover:opacity-100 transition-opacity">
+          PRD ARCHITECT v1.0
         </div>
+        <a 
+          href="https://github.com/awingmawe/prd-generator" 
+          target="_blank"
+          className="p-2 rounded-full hover:bg-zinc-200 dark:hover:bg-zinc-800 transition-all pointer-events-auto opacity-40 hover:opacity-100"
+        >
+          <Github size={18} />
+        </a>
       </header>
 
-      <div className="max-w-7xl mx-auto px-6 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-          {/* Sisi Kiri: Form */}
-          <div className="space-y-6">
-            <div className="space-y-2">
-              <h1 className="text-3xl font-bold tracking-tight">Generate PRD in Seconds</h1>
-              <p className="text-zinc-500 dark:text-zinc-400">
-                Masukkan detail proyek Anda di bawah ini, dan AI kami akan menyusun PRD lengkap beserta diagram arsitektur dan ERD.
-              </p>
-            </div>
-            <PrdForm onGenerate={handleGenerate} isLoading={isLoading} />
+      {/* Hero Section */}
+      <div className={`transition-all duration-700 ease-in-out ${result ? "pt-24 pb-12" : "pt-[30vh]"}`}>
+        <div className="max-w-4xl mx-auto px-6">
+          <div className={`text-center space-y-4 mb-12 transition-all duration-500 ${result ? "opacity-0 h-0 overflow-hidden" : "opacity-100"}`}>
+            <h1 className="text-5xl md:text-6xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
+              Build your next <span className="text-zinc-400">masterpiece.</span>
+            </h1>
+            <p className="text-zinc-500 text-lg max-w-xl mx-auto">
+              Satu kalimat untuk mengubah ide menjadi dokumen teknis yang detail, lengkap dengan arsitektur & diagram ERD.
+            </p>
           </div>
 
-          {/* Sisi Kanan: Hasil */}
-          <div className="space-y-4 h-full">
-            <div className="flex items-center justify-between px-2">
-              <h2 className="text-sm font-semibold uppercase tracking-wider text-zinc-400">Preview</h2>
-            </div>
+          <MinimalistPrompt onGenerate={handleGenerate} isLoading={isLoading} />
+        </div>
+      </div>
+
+      {/* Result Section */}
+      {result && (
+        <div className="max-w-5xl mx-auto px-6 pb-24 animate-in fade-in slide-in-from-bottom-10 duration-1000">
+          <div className="mt-12">
             <PrdResult content={result} />
           </div>
         </div>
-      </div>
-    </main>
+      )}
+
+      {/* Footer Decoration */}
+      {!result && !isLoading && (
+        <div className="fixed bottom-12 w-full text-center text-[10px] uppercase tracking-[0.2em] text-zinc-300 dark:text-zinc-800 font-bold">
+          Empowered by Artificial Intelligence
+        </div>
+      )}
+    </div>
   );
 }

@@ -18,51 +18,50 @@ export default function PrdResult({ content }: PrdResultProps) {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  if (!content) {
-    return (
-      <div className="h-full flex items-center justify-center border-2 border-dashed rounded-xl p-12 text-zinc-400">
-        Hasil PRD akan muncul di sini...
-      </div>
-    );
-  }
+  if (!content) return null;
 
   return (
-    <div className="relative group">
-      <div className="absolute top-4 right-4 z-10 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+    <div className="relative">
+      <div className="sticky top-24 z-20 flex justify-end mb-4">
         <button
           onClick={copyToClipboard}
-          className="flex items-center gap-2 bg-zinc-800 text-white px-3 py-1.5 rounded-lg text-sm hover:bg-zinc-700 transition-colors shadow-lg"
+          className="flex items-center gap-2 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 px-4 py-2 rounded-xl text-sm font-medium hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-all shadow-sm"
         >
           {copied ? (
             <>
-              <Check size={14} /> Copied!
+              <Check size={16} className="text-green-500" /> Copied!
             </>
           ) : (
             <>
-              <Copy size={14} /> Copy as Prompt
+              <Copy size={16} /> Copy as Prompt
             </>
           )}
         </button>
       </div>
 
-      <div className="prose prose-zinc dark:prose-invert max-w-none p-8 bg-zinc-50 dark:bg-zinc-950 border rounded-xl shadow-inner min-h-[600px]">
-        <ReactMarkdown
-          components={{
-            code({ node, className, children, ...props }) {
-              const match = /language-mermaid/.exec(className || "");
-              if (match) {
-                return <Mermaid chart={String(children).replace(/\n$/, "")} />;
+      <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-3xl shadow-sm p-8 md:p-12 overflow-hidden">
+        <article className="prose prose-zinc dark:prose-invert max-w-none prose-headings:font-bold prose-h1:text-4xl prose-h2:text-2xl prose-h2:mt-12 prose-h2:border-b prose-h2:pb-2 prose-zinc:dark:text-zinc-300">
+          <ReactMarkdown
+            components={{
+              code({ node, className, children, ...props }) {
+                const match = /language-mermaid/.exec(className || "");
+                if (match) {
+                  return <Mermaid chart={String(children).replace(/\n$/, "")} />;
+                }
+                return (
+                  <code className="bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded text-sm font-mono" {...props}>
+                    {children}
+                  </code>
+                );
+              },
+              pre({ children }) {
+                return <div className="my-6">{children}</div>;
               }
-              return (
-                <code className={className} {...props}>
-                  {children}
-                </code>
-              );
-            },
-          }}
-        >
-          {content}
-        </ReactMarkdown>
+            }}
+          >
+            {content}
+          </ReactMarkdown>
+        </article>
       </div>
     </div>
   );
